@@ -6,7 +6,9 @@
   <button id="btn-projects" mat-button *ngIf="uid" routerLink="/users/{{uid}}/projects">Projectek</button>
   <button id="btn-profile" mat-button *ngIf="uid" routerLink="/users/{{uid}}/profile">Profil</button>
 
-  <mat-icon id="btn-back" mat-button *ngIf="pid" routerLink="/users/{{authService.currentUser.id}}/projects">keyboard_backspace</mat-icon>
+  <button id="btn-back" mat-button *ngIf="pid" routerLink="/users/{{authService.currentUser.id}}/projects">
+    <mat-icon>keyboard_backspace</mat-icon>
+  </button>
   <button id="btn-edit" mat-button *ngIf="pid" routerLink="/projects/{{pid}}/tasks">Szerkesztés</button>
   <button id="btn-members" mat-button *ngIf="pid" routerLink="/projects/{{pid}}/members">Felhasználók</button>
 

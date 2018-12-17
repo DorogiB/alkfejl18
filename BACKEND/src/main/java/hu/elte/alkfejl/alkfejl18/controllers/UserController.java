@@ -34,12 +34,12 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity getAll(Authentication auth) {
     	String userName = auth.getName();
-    	if(userName.equals("admin")) {
+    	//if(userName.equals("admin")) {
         Iterable<User> users = userRepository.findAll();
         return ResponseEntity.ok(users);
-    	}else {
-    		return ResponseEntity.status(401).body("Only the admin has access to the list of all users");
-    	}
+    	//}else {
+    	//	return ResponseEntity.status(401).body("Only the admin has access to the list of all users");
+    	//}
     }
      
     @PostMapping("/new")

@@ -29,13 +29,13 @@ export class UserProjectsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.authService.login('', ''); // Eltávolítandó
     this.refreshLists();
   }
 
   private async refreshLists() {
     this.projects = await this.userService.getProjects(this.authService.currentUser.id);
     this.ownProjects = await this.userService.getOwnProjects(this.authService.currentUser.id);
+    this.projects = this.projects.filter(project => !(this.ownProjects.map(p => p.id).includes(project.id)));
   }
 
   private createProject(): void {

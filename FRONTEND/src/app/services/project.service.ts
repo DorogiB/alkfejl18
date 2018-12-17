@@ -45,10 +45,12 @@ export class ProjectService {
 
   public addMember(projectID: number, member: User): Promise<User[]> {
     const json = JSON.stringify(member);
-    return this.httpService.post<User[]>(this.route + projectID, json);
+    console.log(json);
+
+    return this.httpService.post<User[]>(this.route + projectID + '/addMember/', json);
   }
 
   public removeMember(projectID: number, memberID: number): Promise<User> {
-    return this.httpService.post<User>(this.route + projectID + '/removeMember/' + memberID, '{}');
+    return this.httpService.post<User>(this.route + projectID + '/removeMember' + memberID, '{}');
   }
 }

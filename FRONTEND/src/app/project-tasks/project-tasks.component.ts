@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Skill } from './../classes/skill';
 import { AuthenticationService } from './../services/auth.service';
 // import { User } from 'src/app/classes/user';
@@ -45,12 +46,10 @@ export class ProjectTasksComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.dateToString = dateToString;
-    this.project = new Project('', new User('', '', ''));
+    this.project = new Project('', 0);
   }
 
   async ngOnInit() {
-
-    await this.authService.login('', ''); // Eltávolítandó
     this.svg = d3.select('svg');
     this.render = new dagreD3.render();
 
@@ -82,14 +81,19 @@ export class ProjectTasksComponent implements OnInit {
       let fillColor = '#cd5555';
       let textColor = '#ffffff';
 
+      task.state = 0;
+
       if (task.complete) {  // Completed (green)
         fillColor = '#0b6623';
-      } else if (task.assignees.length  && !task.complete) {  // In progress (yellow)
+        task.state = 3;
+      } else if (task.startTime != null  && !task.complete) {  // In progress (yellow)
         fillColor = '#ffcc00';
         textColor = '#000000';
+        task.state = 2;
       } else if (this.checkAvailability(task)) {  // Available to work on (white)
         fillColor = '#ffffff';
         textColor = '#000000';
+        task.state = 1;
       }
 
       this.graph.setNode(task.id, {
@@ -160,26 +164,47 @@ export class ProjectTasksComponent implements OnInit {
     });
   }
 
-  private deleteTask(): void {
-    // this.taskService.deleteTask(this.selectedTask.id);
-    // this.projectService.removeTaskFromProject(this.project.id, this.selectedTask.id);
-    // this.initGraph();
-  }
-
-  private saveTask(): void {
-    // this.taskService.saveTask(this.selectedTask);
-    // this.initGraph();
+  private async deleteTask() {
+    await this.taskService.deleteTask(this.selectedTask.id);
+    this.selectedTask = null;
+    this.initGraph();
   }
 
   private nodeClicker(id: string): void {
     const node = this.graph.node(id);
     this.selectedTask = node.task;
     console.log('SELECTED TASK:', node.task);
-    // this.selectedTaskPrereqs = this.tasks.filter(task => task.id !== this.selectedTask.id);
-    // this.userService.getUsersByUIDs(node.task.assignees).subscribe(users => node.task._assignees = users);
   }
 
-  private finishTask(): void {
-    // this.selectedTask.finishTask(currentUser);
+  private async beginTask() {
+    if (this.selectedTask.startTime === null) {
+      await this.taskService.beginTask(this.selectedTask.id);
+    }
+    await this.taskService.assignTaskToUser(this.selectedTask.id, this.authService.currentUser);
+    this.initGraph();
+    this.selectedTask = null;
+  }
+
+  private async endTask() {
+    await this.taskService.endTask(this.selectedTask.id, this.authService.currentUser);
+    this.initGraph();
+    this.selectedTask = null;
+  }
+
+  private isDeletable(): boolean {
+    if (this.selectedTask.assignees.length || this.project.leader.id !== this.authService.currentUser.id || this.selectedTask.complete) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private startBtnVisibility(): boolean {
+    // tslint:disable-next-line:max-line-length
+    if ([1, 2].includes(this.selectedTask.state) && !(this.selectedTask.assignees.map(user => user.id).includes(this.authService.currentUser.id))) {
+      return true;
+    }
+
+    return false;
   }
 }

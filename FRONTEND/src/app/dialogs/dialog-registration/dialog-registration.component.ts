@@ -33,7 +33,7 @@ export class DialogRegistrationComponent implements OnInit {
     this.name = this.userName = this.passwd = this.passwd2 = '';
   }
 
-  private async validateRegForm(): void {
+  private async validateRegForm() {
 
     if (!this.name.length || !this.userName.length || !this.passwd.length) {
       this.snackBar.open('Minden adatot meg kell adni!', 'HIBA', { duration: 2000 });

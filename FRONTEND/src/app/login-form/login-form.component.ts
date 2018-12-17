@@ -29,17 +29,21 @@ export class LoginFormComponent implements OnInit {
   ngOnInit() { }
 
   async onSubmit() {
-    if (this.loginForm.valid) {
+    // console.log(await this.authService.login('', ''));
+    // this.router.navigate([`/users/${this.authService.currentUser.id}/projects`]);
+
+    // if (this.loginForm.valid) {
       const username = this.loginForm.get('username').value;
       const password = this.loginForm.get('password').value;
 
       try {
         await this.authService.login(username, password);
-//        this.router.navigate([`/users/${this.authService.currentUser.id}/projects`]);
+        // await this.authService.login('atesz', 'a');
+        this.router.navigate([`/users/${this.authService.currentUser.id}/projects`]);
       } catch {
         this.snackBar.open('SIKERTELEN BEJELENTKEZÉS!', 'HIBA', { duration: 2000 });
       }
-    }
+    // }
   }
 
   private openRegDialog(): void {

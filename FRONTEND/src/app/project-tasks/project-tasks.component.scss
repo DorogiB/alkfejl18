@@ -109,8 +109,14 @@ h1 {
       padding: 10px 0;
       font-size: 14px;
       font-weight: 400;
-      color: rgba(0,0,0,0.42);
+      color: rgba(0, 0, 0, 0.712);
       margin-bottom: 1.25em;
+
+      .value-field {
+        font-weight: bold;
+        color: #000;
+        padding-left: 6px;
+      }
 
       &#form-field-dates {
 
@@ -132,24 +138,31 @@ h1 {
         padding: 6px 10px;
         margin-left: 20px;
         border-radius: 3px;
-        background-color: #cd5555;
-        color: white;
 
-        &.completed {
+        &.state-3 {
           background-color: green;
           color: white;
         }
 
-        &.in-progress {
+        &.state-2 {
           background-color: orange;
           color: black;
         }
+
+        &.state-1 {
+          background-color: white;
+          color: black;
+        }
+
+        &.state-0 {
+          background-color: #cd5555;
+          color: white;
+          }
       }
 
       button {
-        position: absolute;
-        top: 0;
-        right: 0;
+        float: right;
+        margin: -10px 0 0 10px;
       }
     }
   }

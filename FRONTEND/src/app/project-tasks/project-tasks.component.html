@@ -24,31 +24,20 @@
 
     <mat-card-header>
       <mat-card-title><span>Feladat:</span> {{selectedTask.name}}</mat-card-title>
-      <mat-icon mat-button class="btn-save" (click)="saveTask()" >save</mat-icon>
-      <mat-icon mat-button class="btn-delete" (click)="deleteTask()" *ngIf="!selectedTask.assignees.length" >delete</mat-icon>
+      <!-- <mat-icon mat-button class="btn-save" (click)="saveTask()" >save</mat-icon> -->
+      <mat-icon mat-button class="btn-delete" (click)="deleteTask()" *ngIf="isDeletable()" >delete</mat-icon>
     </mat-card-header>
 
     <mat-divider></mat-divider>
 
     <mat-card-content>
-
-      <div id="form-field-dates" class="custom-form-field">
-        <span class="date-field">
-          Feladat kezdete:
-          <span>{{dateToString(selectedTask.startTime)}}</span>
-        </span>
-        <span class="date-field">
-          Feladat befejezése:
-          <span>{{dateToString(selectedTask.endTime)}}</span>
-        </span>
-      </div>
 <!--
       <mat-form-field>
         <input matInput type="text" placeholder="Feladat neve"
                [(ngModel)]="selectedTask.name"
                ngDisabled="selectedTask.complete">
       </mat-form-field>
- -->
+
       <mat-form-field>
         <mat-select placeholder="Előfeltételek" [(ngModel)]="selectedTask.prerequisites" multiple>
           <mat-option *ngFor="let task of selectedTaskPrereqs" [value]="task.id">{{task.name}}</mat-option>
@@ -58,20 +47,36 @@
       <div class="custom-form-field">
         Közreműködők: <span *ngFor="let user of selectedTask.assignees">{{user.name}} </span>
       </div>
-<!--
+
       <mat-form-field>
         <mat-select placeholder="Közreműködők" [(ngModel)]="selectedTask.assignees" multiple>
           <mat-option *ngFor="let user of users" [value]="user.id">{{user.fullName}}</mat-option>
         </mat-select>
       </mat-form-field>
  -->
-      <div id="form-field-done" class="custom-form-field">
+      <div id="form-field-state" class="custom-form-field">
         Állapot:
         <span id="tag-state" class="state-{{selectedTask.state}}">
           {{selectedTask.state === 0 ? "BLOKKOLT" : (selectedTask.state === 1 ? "MEGKEZDHETŐ" : (selectedTask.state === 2 ? "FOLYAMATBAN" : "BEFEJEZETT"))}}
         </span>
-        <button mat-stroked-button *ngIf="[1, 2].includes(selectedTask.state)"  (click)="beginTask()">Megkezd / csatlakozik</button>
-        <button mat-stroked-button *ngIf="selectedTask.state === 2"  (click)="finishTask()">Befejez</button>
+        <button class="task-btn" mat-stroked-button *ngIf="startBtnVisibility()"  (click)="beginTask()">Megkezd / csatlakozik</button>
+        <button class="task-btn" mat-stroked-button *ngIf="selectedTask.state === 2"  (click)="endTask()">Befejez</button>
+      </div>
+
+      <div id="form-field-dates" class="custom-form-field" *ngIf="selectedTask.startTime" >
+        <span class="date-field">
+          Feladat kezdete:
+          <span>{{dateToString(selectedTask.startTime)}}</span>
+        </span>
+        <span class="date-field">
+          Feladat befejezése:
+          <span>{{dateToString(selectedTask.completionTime)}}</span>
+        </span>
+      </div>
+
+      <div id="form-field-done" class="custom-form-field" *ngIf="selectedTask.complete" >
+        Befejezte:
+        <span class="value-field">{{selectedTask.completedBy}}</span>
       </div>
 
     </mat-card-content>

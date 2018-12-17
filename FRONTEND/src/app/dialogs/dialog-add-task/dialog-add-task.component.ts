@@ -77,6 +77,7 @@ export class DialogAddTaskComponent implements OnInit {
 
       this._task.requiredSkills.push(_skill.id);
     }
+    console.log(this._task);
   }
 
   private async removeSkill(skillToRemove: Skill) {

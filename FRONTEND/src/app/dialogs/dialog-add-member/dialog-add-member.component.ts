@@ -18,7 +18,7 @@ export class DialogAddMemberComponent implements OnInit {
 
   private assignedUsers: User[];
   private users: User[];
-  private selectedUserId: number;
+  private selectedUser: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,10 +27,10 @@ export class DialogAddMemberComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Project
   ) { }
 
-  ngOnInit() {
-    // let assignedUsers: number[];
-    // this.projectService.getProjectMembers(this.data.id).subscribe(userIds => assignedUsers = userIds);
-    // this.userService.getOtherUsers(currentUser.id).subscribe(users => this.users = users);
-    // this.users = this.users.filter(user => !assignedUsers.includes(user.id));
+  async ngOnInit() {
+    console.log(this.data);
+    this.users = await this.userService.getUsers();
+    this.assignedUsers = await this.projectService.getMembers(this.data.id);
+    this.users = this.users.filter(user => !(this.assignedUsers.map(aUser => aUser.id).includes(user.id)));
   }
 }

@@ -9,7 +9,7 @@ import { User } from '../classes/user';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatAutocomplete, MatChipInputEvent } from '@angular/material';
+import { MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
 @Component({
   selector: 'app-user-profile',
@@ -55,7 +55,6 @@ export class UserProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.currentUser = new User('', '', '');
-    await this.authService.login('', ''); // Eltávolítandó
     this.currentUser = JSON.parse(JSON.stringify(this.authService.currentUser));
     this.allSkills = await this.skillService.getAllSkills();
     this.userSkills = await this.userService.getSkillsOfUser(this.currentUser.id);
@@ -76,12 +75,27 @@ export class UserProfileComponent implements OnInit {
       await this.userService.addSkill(this.currentUser.id, _skill);
       this.allSkills = await this.skillService.getAllSkills();
       this.userSkills.push(_skill);
-      this.myControl.setValue(null);
+
+      if (input) {
+        input.value = '';
+      }
     }
   }
 
   private async remove(skill: Skill) {
-    console.log(await this.userService.removeSkill(this.currentUser.id, skill));
+    await this.userService.removeSkill(this.currentUser.id, skill);
+    this.userSkills = await this.userService.getSkillsOfUser(this.currentUser.id);
+  }
+
+  async selected(event: MatAutocompleteSelectedEvent) {
+    const _skill = this.allSkills.find(item => item.name === event.option.viewValue);
+
+    await this.userService.addSkill(this.currentUser.id, _skill);
+    this.allSkills = await this.skillService.getAllSkills();
+    this.userSkills.push(_skill);
+
+    this.chipInput.nativeElement.value = '';
+    // this.fruitCtrl.setValue(null);
   }
 
   private async saveUserData() {
@@ -93,11 +107,5 @@ export class UserProfileComponent implements OnInit {
 
   private async restoreUserData() {
     this.currentUser = await this.userService.getUser(this.currentUser.id);
-  }
-
-  private removeSkill(skill: Skill): void {
-    this.userService.removeSkill(this.currentUser.id, skill).then(async () => {
-      this.userSkills = await this.userService.getSkillsOfUser(this.currentUser.id);
-    });
   }
 }

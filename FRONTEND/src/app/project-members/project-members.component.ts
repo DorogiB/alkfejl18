@@ -6,6 +6,7 @@ import { UserService } from './../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { Project } from '../classes/projects';
+import { select } from 'd3';
 
 @Component({
   selector: 'app-project-members',
@@ -17,7 +18,7 @@ import { Project } from '../classes/projects';
 })
 export class ProjectMembersComponent implements OnInit {
 
-  public project: Project;
+  public project: Project = new Project('', 0);
   private assignedUsers: User[];
 
   private selectedUser: User;
@@ -31,10 +32,9 @@ export class ProjectMembersComponent implements OnInit {
     public dialog: MatDialog
   ) { }
 
-  ngOnInit() {
-    // const projectId: number = parseInt(this.route.snapshot.paramMap.get('pid'), 10);
-    // this.projectService.getProject(projectId).subscribe(project => this.project = project);
-    // this.userService.getUsersByPID(projectId).subscribe(users => this.assignedUsers = users);
+  async ngOnInit() {
+    const projectId: number = parseInt(this.route.snapshot.paramMap.get('pid'), 10);
+    this.project = await this.projectService.getProject(projectId);
   }
 
   private openAddMemberDialog(): void {
@@ -43,11 +43,11 @@ export class ProjectMembersComponent implements OnInit {
       data: this.project
     });
 
-    dialogRef.afterClosed().subscribe(selectedUser => {
+    dialogRef.afterClosed().subscribe(async selectedUser => {
+      console.log(selectedUser);
+
       if (!selectedUser) { return; }
-      // this.projectService.addMemberToProject(this.project.id, selectedUser);
-      // this.userService.addMembershipToUser(selectedUser, this.project.id);
-      // this.userService.getUsersByPID(this.project.id).subscribe(users => this.assignedUsers = users);
+      console.log(await this.projectService.addMember(this.project.id, selectedUser));
     });
   }
 

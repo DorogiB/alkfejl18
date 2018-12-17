@@ -11,9 +11,8 @@ export class HttpService {
       'Content-Type': 'application/json'
     };
 
-    const token = window.localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Basic ${token}`;
+    if (window.localStorage.getItem('token')) {
+      headers['Authorization'] = `Basic ${window.localStorage.getItem('token')}`;
     }
 
     return {
@@ -23,13 +22,11 @@ export class HttpService {
 
   private URL = 'http://localhost:8080/';
 
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  constructor(private httpClient: HttpClient) { }
 
   public get<T>(route): Promise<T> {
     return this.httpClient.get(this.URL + route, this.options)
-      .toPromise() as Promise<T>;
+    .toPromise() as Promise<T>;
   }
 
   public post<T>(route, body): Promise<T> {

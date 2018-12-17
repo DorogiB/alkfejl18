@@ -61,7 +61,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     MatDividerModule,
     HttpClientModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthenticationService {
 
-  public currentUser: User = null;
+  public currentUser: User = new User('', '', '');
 
   constructor(
     private httpService: HttpService,
@@ -20,8 +20,7 @@ export class AuthenticationService {
       const token = btoa(`${username}:${password}`);
       window.localStorage.setItem('token', token);
       this.currentUser = await this.httpService.post<User>('users/login', username);
-      console.log('TOKEN:', window.localStorage.getItem('token'));
-      console.log('LOGIN (current user):', this.currentUser);
+      // this.currentUser = await this.httpService.get<User>('users/1');
       return Promise.resolve(this.currentUser);
     } catch (e) {
       console.log('LOGIN ERROR:', e);
