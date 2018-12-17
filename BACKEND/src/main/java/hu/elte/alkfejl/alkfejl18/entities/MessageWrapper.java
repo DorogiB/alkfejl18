@@ -19,7 +19,7 @@ public class MessageWrapper {
 	private ArrayList<Integer> prerequisites;
 	private Boolean isOpen;
 	private Integer projectId;
-	private String userName;
+	private String username;
 	private String password;
 	private Date deadline;
 	
@@ -28,7 +28,7 @@ public class MessageWrapper {
 	}
 	
 	public Boolean isUser() {
-		return this.userName != null && this.password != null;
+		return this.username != null && this.password != null;
 	}
 	
 	public Boolean isTask() {

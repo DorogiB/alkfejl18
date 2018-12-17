@@ -129,7 +129,7 @@ public class ProjectController {
     public ResponseEntity addMember(@PathVariable Integer id,@RequestBody MessageWrapper member,Authentication auth){
     	String userName = auth.getName();
     	Optional<Project> oProject = projectRepository.findById(id);
-    	Optional<User> oMember = userRepository.findByUsername(member.getUserName());
+    	Optional<User> oMember = userRepository.findByUsername(member.getUsername());
     	if(!oProject.isPresent() || !oMember.isPresent()) {
     		return ResponseEntity.notFound().build();
     	}
@@ -151,7 +151,7 @@ public class ProjectController {
     public ResponseEntity removeMember(@PathVariable Integer id, @RequestBody MessageWrapper member,Authentication auth){
     	String userName = auth.getName();
     	Optional<Project> oProject = projectRepository.findById(id);
-    	Optional<User> oMember = userRepository.findByUsername(member.getUserName());
+    	Optional<User> oMember = userRepository.findByUsername(member.getUsername());
     	if(!oProject.isPresent() || !oMember.isPresent() || !oProject.get().getMembers().contains(oMember.get())) {
     		return ResponseEntity.notFound().build();
     	}

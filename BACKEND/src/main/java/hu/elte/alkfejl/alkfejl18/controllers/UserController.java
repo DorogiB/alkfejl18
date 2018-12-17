@@ -47,7 +47,7 @@ public class UserController {
         if(!user.isUser()) {
         	return ResponseEntity.badRequest().build();
         }
-        User newUser = new User(null,user.getUserName(),passwordEncoder.encode(user.getPassword()),user.getName(),new ArrayList<Project>(),new ArrayList<Project>(),
+        User newUser = new User(null,user.getUsername(),passwordEncoder.encode(user.getPassword()),user.getName(),new ArrayList<Project>(),new ArrayList<Project>(),
         		new ArrayList<Skill>(),new ArrayList<Task>());
         return ResponseEntity.ok(userRepository.save(newUser));
     }
@@ -106,8 +106,8 @@ public class UserController {
         	if(user.getName() != null) {
         		editedUser.setName(user.getName());
         	}
-        	if(user.getUserName() != null) {
-        		editedUser.setUsername(user.getUserName());
+        	if(user.getUsername() != null) {
+        		editedUser.setUsername(user.getUsername());
         	}
         	if(user.getPassword() != null) {
         		editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
