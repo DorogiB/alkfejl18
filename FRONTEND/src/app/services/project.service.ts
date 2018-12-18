@@ -50,7 +50,7 @@ export class ProjectService {
     return this.httpService.post<User[]>(this.route + projectID + '/addMember/', json);
   }
 
-  public removeMember(projectID: number, memberID: number): Promise<User> {
-    return this.httpService.post<User>(this.route + projectID + '/removeMember' + memberID, '{}');
+  public removeMember(projectID: number, memberName: string): Promise<User> {
+    return this.httpService.post<User>(this.route + projectID + '/removeMember/0', `{"username": "${memberName}"}`);
   }
 }

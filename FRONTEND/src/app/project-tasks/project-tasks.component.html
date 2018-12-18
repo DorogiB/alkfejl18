@@ -54,6 +54,10 @@
         </mat-select>
       </mat-form-field>
  -->
+      <!-- <div class="custom-form-field" *ngIf="selectedTask.isOpen && authService.currentUser.id !== project.leader.id" >
+        <button (click)="joinTask()">Csatlakozás</button>
+      </div>
+ -->
       <div id="form-field-state" class="custom-form-field">
         Állapot:
         <span id="tag-state" class="state-{{selectedTask.state}}">

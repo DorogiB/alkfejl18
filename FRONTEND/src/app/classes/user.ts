@@ -5,7 +5,7 @@ import { Project } from 'src/app/classes/projects';
 export class User {
   public id: number;
   public name: string;
-  public userName: string;
+  public username: string;
   public password: string;
   public projects: Project[];
   public ownedProjects: Project[];
@@ -14,7 +14,7 @@ export class User {
 
   constructor(name: string, userName: string, password: string) {
     this.name = name;
-    this.userName = userName;
+    this.username = userName;
     this.password = password;
     this.projects = [];
     this.ownedProjects = [];

@@ -180,7 +180,9 @@ export class ProjectTasksComponent implements OnInit {
     if (this.selectedTask.startTime === null) {
       await this.taskService.beginTask(this.selectedTask.id);
     }
-    await this.taskService.assignTaskToUser(this.selectedTask.id, this.authService.currentUser);
+    console.log(this.authService.currentUser);
+
+    // await this.taskService.assignTaskToUser(this.selectedTask.id, this.authService.currentUser);
     this.initGraph();
     this.selectedTask = null;
   }
@@ -201,10 +203,15 @@ export class ProjectTasksComponent implements OnInit {
 
   private startBtnVisibility(): boolean {
     // tslint:disable-next-line:max-line-length
-    if ([1, 2].includes(this.selectedTask.state) && !(this.selectedTask.assignees.map(user => user.id).includes(this.authService.currentUser.id))) {
+    // if ([1, 2].includes(this.selectedTask.state) && !(this.selectedTask.assignees.map(user => user.id).includes(this.authService.currentUser.id))) {
+    if (this.selectedTask.state === 1) {
       return true;
     }
 
     return false;
+  }
+
+  private async joinTask() {
+
   }
 }

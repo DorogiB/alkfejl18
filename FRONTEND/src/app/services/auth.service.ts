@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthenticationService {
 
-  public currentUser: User = new User('', '', '');
+  public currentUser: User = null;
 
   constructor(
     private httpService: HttpService,

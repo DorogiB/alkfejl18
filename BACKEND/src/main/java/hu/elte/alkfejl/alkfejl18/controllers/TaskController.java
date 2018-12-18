@@ -123,10 +123,10 @@ public class TaskController {
 	}
 	
 	@PutMapping("/{id}/assign")
-	public ResponseEntity assignTask(@PathVariable Integer id,Authentication auth){
+	public ResponseEntity assignTask(@PathVariable Integer id,Authentication auth,MessageWrapper muser){
 		String userName = auth.getName();
 		Optional<Task> oTask = taskRepository.findById(id);
-		Optional<User> oUser = userRepository.findByUsername(userName);
+		Optional<User> oUser = userRepository.findByUsername(muser.getUsername());
 		if (!oUser.isPresent() || !oTask.isPresent()) {
             return ResponseEntity.notFound().build();
         }

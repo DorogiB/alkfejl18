@@ -35,6 +35,7 @@ export class ProjectMembersComponent implements OnInit {
   async ngOnInit() {
     const projectId: number = parseInt(this.route.snapshot.paramMap.get('pid'), 10);
     this.project = await this.projectService.getProject(projectId);
+    this.assignedUsers = await this.projectService.getMembers(projectId);
   }
 
   private openAddMemberDialog(): void {
@@ -48,19 +49,27 @@ export class ProjectMembersComponent implements OnInit {
 
       if (!selectedUser) { return; }
       console.log(await this.projectService.addMember(this.project.id, selectedUser));
-    });
+      const projectId: number = parseInt(this.route.snapshot.paramMap.get('pid'), 10);
+      this.project = await this.projectService.getProject(projectId);
+      this.assignedUsers = await this.projectService.getMembers(projectId);
+      });
   }
 
-  private selectUser(user: User): void {
-    // this.selectedUser = user;
+  private async selectUser(user: User) {
+    this.selectedUser = user;
+    this.userProjects = await this.projectService.getAllProjects();
+//    this.userProjects = this.userProjects.filter(project => project.members.includes(user.id));
+    console.log(this.userProjects);
+    console.log(this.userProjects);
+
     // this.projectService.getUserProjects(user.id).subscribe(projects => this.userProjects = projects);
     // this.projectService.getUserOwnProjects(user.id).subscribe(projects => this.userOwnProjects = projects);
   }
 
-  private removeUser(): void {
-    // this.projectService.removeUserFromProject(this.selectedUser.id, this.project.id);
-    // this.userService.removeUserFromProject(this.selectedUser.id, this.project.id);
-    // this.userService.getUsersByPID(this.project.id).subscribe(users => this.assignedUsers = users);
-    // this.selectedUser = null;
+  private async removeUser() {
+    await this.projectService.removeMember(this.project.id, this.selectedUser.username);
+    const projectId: number = parseInt(this.route.snapshot.paramMap.get('pid'), 10);
+    this.project = await this.projectService.getProject(projectId);
+    this.assignedUsers = await this.projectService.getMembers(projectId);
   }
 }
